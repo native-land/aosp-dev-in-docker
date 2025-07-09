@@ -19,6 +19,8 @@ $ sudo docker build -t aosp .
 ```console
 $ sudo docker create --name aosp-dev --interactive --privileged aosp:latest
 ```
+> [!IMPORTANT]  
+> Check if `--privileged` can be omitted here, provided that we'll issue when executing the script `build-aosp.sh` (where it really matters).
 * You'll receive a container ID. However, `aosp-dev` is a better name to refer to it. The container is created, but it's not running.
 * You can still see it if you run the command
 ```console
@@ -48,3 +50,14 @@ $ sudo docker exec --interactive --tty --workdir /aosp aosp-dev get-aosp.sh --gi
 * These git parameters `--git-user` (or `-u`) and `--git-email` (or `-e`) are needed only for the first time. If, for any reason, you need to re-run the `get-aosp` script, you can omit these.
 > [!TIP]  
 > `--sync-jobs <number>`, or just `-j <number>` is another parameter that specifies how many concurrent workers will pull the repo simultaneously. When omitted, 4 (four) is assumed.
+
+## Build the AOSP Codebase
+* Ensuring that you have started an `aosp-dev` container, issue the following command on a host terminal:
+```console
+$ sudo docker exec --interactive --tty --privileged --workdir /aosp aosp-dev build-aosp.sh
+```
+> [!TIP]  
+> `--sync-jobs <number>`, or just `-j <number>` specifies how many concurrent workers will build AOSP simultaneously. When omitted, 4 (four) is assumed.
+* It builds the `aosp_cf_x86_64_only_phone-aosp_current-userdebug` flavor. A Cutterfish-enabled phone target based on an x86_64 architecture with all the debug symbols.
+> [!NOTE]  
+> I'll extend this script to enable a `--lunch` or `-l` param to change this default.

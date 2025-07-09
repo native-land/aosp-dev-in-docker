@@ -29,10 +29,6 @@ RUN chmod +x /usr/local/bin/get-aosp.sh
 COPY build-aosp.sh /usr/local/bin/build-aosp.sh
 RUN chmod +x /usr/local/bin/build-aosp.sh
 
-# Configure sysctl settings
-RUN sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0 && \
-    sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-
 # Set working directory
 WORKDIR /aosp
 
