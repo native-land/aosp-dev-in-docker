@@ -37,25 +37,6 @@ if [[ -z "$__BUILD_SETUP__" ]]; then
     export __BUILD_SETUP__=1
 fi
 
-# Function to be executed as the "finally" block
-cleanup_function() {
-    echo "Restauring unprivileged user namespaces"
-    echo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=1
-    sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=1
-    echo sysctl -w kernel.apparmor_restrict_unprivileged_userns=1
-    sysctl -w kernel.apparmor_restrict_unprivileged_userns=1
-}
-
-# Register the cleanup_function to be executed when the script exits
-# regardless of whether it exits normally or due to an error.
-trap cleanup_function EXIT
-
-echo "Disabling unprivileged user namespaces during build (it happens on host!)"
-echo sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0
-sysctl -w kernel.apparmor_restrict_unprivileged_unconfined=0 || exit 3
-echo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
-sysctl -w kernel.apparmor_restrict_unprivileged_userns=0 || exit 3
-
 echo "Building AOSP"
 echo "$ m -j$SYNC_JOBS"
-m -j${SYNC_JOBS} || exit 4
+m -j${SYNC_JOBS} || exit 3
