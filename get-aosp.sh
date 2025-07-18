@@ -72,8 +72,11 @@ fi
 # Pre-accept repy diff coloring
 git config --global color.ui true
 
-echo "Initializing AOSP repo's latest release" 
-repo init --partial-clone -b android-latest-release -u https://android.googlesource.com/platform/manifest --depth=1 || exit 2
+# Configure repo to use Tsinghua mirror
+export REPO_URL='https://mirrors.tuna.tsinghua.edu.cn/git/git-repo'
+
+echo "Initializing AOSP repo's latest release from Tsinghua mirror" 
+repo init --partial-clone -b android-latest-release -u https://mirrors.tuna.tsinghua.edu.cn/git/AOSP/platform/manifest --depth=1 || exit 2
 
 echo "Acquiring AOSP"
 repo sync -c -j${SYNC_JOBS} --no-manifest-update --fail-fast || exit 3

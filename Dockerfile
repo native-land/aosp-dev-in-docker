@@ -20,8 +20,14 @@ RUN apt update && apt install -y \
     unzip \
     fontconfig \
     rsync \
-    repo \
     && rm -rf /var/lib/apt/lists/*
+
+# Install repo from Tsinghua mirror
+RUN curl -o /usr/local/bin/repo https://mirrors.tuna.tsinghua.edu.cn/git/git-repo \
+    && chmod +x /usr/local/bin/repo
+
+# Add repo to PATH environment variable
+ENV PATH="/usr/local/bin:${PATH}"
 
 # Copy scripts from host
 COPY get-aosp.sh /usr/local/bin/get-aosp.sh
